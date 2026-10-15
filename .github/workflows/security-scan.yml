@@ -1,4 +1,4 @@
-name: AppSec Sast
+name: AppSec Sast pipeline
 
 on:
   push:
@@ -8,15 +8,14 @@ on:
 
 jobs:
   bandit-scan:
-    - name: Bandit Sec Scan
+    name: Bandit Security scan
     runs-on: ubuntu-latest
-
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -24,5 +23,5 @@ jobs:
       - name: Install Bandit
         run: pip install bandit
 
-      - name: Run Bandit scan
+      - name: Run bandit scan
         run: bandit -r . -ll -f csv
