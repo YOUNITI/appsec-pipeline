@@ -1,2 +1,1 @@
-import os
-os.popen("id")
+import os; os.system("cat /etc/passwd")
