@@ -7,21 +7,36 @@ on:
     branches: [ "main" ]
 
 jobs:
-  bandit-scan:
-    name: Bandit Security scan
+  bandit-incremental-scan:
+    name: Bandit Incremental Scan
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install Bandit
-        run: pip install bandit
+      - name: Get changed py files
+        id: changed-files
+        uses: tj-actions/changed-files@v41
+        with:
+          files: |
+            **.py
 
-      - name: Run bandit scan
-        run: bandit -r . -ll -f csv
+      - name: Run bandit on changed files
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          echo "Измененные файлы: ${{ steps.changed-files.outputs.all_changed_files }}"
+          pip install bandit
+          bandit ${{ steps.changed-files.outputs.all_changed_files }} --ll -f csv
+
+      - name: Skip scan
+        if: steps.changed-files.outputs.any_changed == 'false'
+        run: |
+          echo "Файлы не были изменены"
