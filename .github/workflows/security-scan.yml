@@ -36,7 +36,7 @@ jobs:
         run: |
           echo "Измененные файлы: ${{ steps.changed-files.outputs.all_changed_files }}"
           pip install bandit
-          bandit ${{ steps.changed-files.outputs.all_changed_files }} --ll -f csv
+          bandit ${{ steps.changed-files.outputs.all_changed_files }} -l medium -f csv
 
       - name: Skip scan
         if: steps.changed-files.outputs.any_changed == 'false'
