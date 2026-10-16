@@ -28,6 +28,8 @@ jobs:
         with:
           files: |
             **.py
+          include_all_old_new_renames: true
+          output_renamed_files_as_deleted_and_added: true
 
       - name: Run bandit on changed files
         if: steps.changed-files.outputs.any_changed == 'true'
